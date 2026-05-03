@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     unzip \
     git \
-    && pecl install mongodb \
+    && pecl install mongodb-1.19.3 \
     && docker-php-ext-enable mongodb
 
 # Enable Apache mod_rewrite for friendly URLs
