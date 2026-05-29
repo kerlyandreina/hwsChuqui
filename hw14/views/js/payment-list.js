@@ -8,7 +8,7 @@ createApp({
         const loadRecords = async () => {
             try {
                 const response = await fetch('../../controllers/api_payments.php');
-                if (!response.ok) throw new Error("Error API");
+                if (!response.ok) throw new Error("API Error");
                 const data = await response.json();
                 records.value = data.map(r => ({ ...r, isEditing: false }));
             } catch (error) {
@@ -32,12 +32,12 @@ createApp({
                     loadRecords();
                 }
             } catch (error) {
-                alert("Error al actualizar");
+                alert("Error updating record.");
             }
         };
 
         const deleteRecord = async (item) => {
-            if (confirm("¿Eliminar registro de pago?")) {
+            if (confirm("Delete this payment record?")) {
                 const id = item._id?.$oid || item._id;
                 try {
                     const response = await fetch('../../controllers/api_payments.php', {
@@ -48,7 +48,7 @@ createApp({
                     const result = await response.json();
                     if (result.success) loadRecords();
                 } catch (error) {
-                    alert("Error al eliminar");
+                    alert("Error deleting record.");
                 }
             }
         };

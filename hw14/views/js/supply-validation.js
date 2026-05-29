@@ -12,7 +12,7 @@ supplyForm.addEventListener('submit', (event) => {
 
     if (expirationDateValue < orderDateValue) {
         event.preventDefault();
-        expirationDateInput.setCustomValidity('La fecha de caducidad no puede ser anterior a la fecha de pedido.');
+        expirationDateInput.setCustomValidity('Expiration date cannot be earlier than the order date.');
         expirationDateInput.reportValidity();
     } else {
         expirationDateInput.setCustomValidity('');

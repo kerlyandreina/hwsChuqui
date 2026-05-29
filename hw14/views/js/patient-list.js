@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     deleteForms.forEach(form => {
         form.addEventListener('submit', (event) => {
-            if (!confirm('¿Estás seguro de eliminar permanentemente este paciente?')) {
+            if (!confirm('Are you sure you want to permanently delete this patient?')) {
                 event.preventDefault();
             }
         });

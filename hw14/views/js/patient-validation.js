@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tenDigitRegex = /^[0-9]{10}$/;
         if (!tenDigitRegex.test(idInput.value)) {
-            errors.push("La cédula debe contener exactamente 10 dígitos numéricos.");
+            errors.push("ID number must contain exactly 10 numeric digits.");
         }
         if (!tenDigitRegex.test(phoneInput.value)) {
-            errors.push("El teléfono debe contener exactamente 10 dígitos numéricos.");
+            errors.push("Phone number must contain exactly 10 numeric digits.");
         }
 
         const birthDate = new Date(birthdayInput.value);
@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (age < 18 && legalRepInput.value.trim() === "") {
-            errors.push("El paciente es menor de edad (" + age + " años). Debe ingresar el nombre del representante legal.");
+            errors.push("The patient is a minor (" + age + " years old). You must enter the legal representative's name.");
             legalRepInput.classList.add('is-invalid');
         } else {
             legalRepInput.classList.remove('is-invalid');
         }
 
         if (birthDate > today) {
-            errors.push("La fecha de nacimiento no puede ser una fecha futura.");
+            errors.push("Date of birth cannot be a future date.");
         }
 
         if (errors.length > 0) {
             e.preventDefault();
-            alert("Errores en el formulario:\n\n" + errors.map(err => "- " + err).join("\n"));
+            alert("Form errors:\n\n" + errors.map(err => "- " + err).join("\n"));
         }
     });
 });

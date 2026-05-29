@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let errors = [];
 
         if (patientID.value.length !== 10 || !/^\d+$/.test(patientID.value)) {
-            errors.push("La cédula del paciente debe tener 10 dígitos numéricos.");
+            errors.push("Patient ID must have exactly 10 numeric digits.");
         }
 
         if (parseFloat(amount.value) <= 0) {
-            errors.push("El monto del pago debe ser mayor a cero.");
+            errors.push("Payment amount must be greater than zero.");
         }
 
         const selectedDate = new Date(date.value);
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
         today.setHours(0, 0, 0, 0);
 
         if (selectedDate > today) {
-            errors.push("La fecha de pago no puede ser futura.");
+            errors.push("Payment date cannot be in the future.");
         }
 
         if (errors.length > 0) {
             e.preventDefault();
-            alert("Error en la validación del pago:\n\n- " + errors.join("\n- "));
+            alert("Payment validation error:\n\n- " + errors.join("\n- "));
         }
     });
 });

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Verificar sesión activa
+// Verify active session
 if (!isset($_SESSION['user']) || !isset($_SESSION['role'])) {
     header('Location: ../../index.php?error=no_session');
     exit;
@@ -25,12 +25,12 @@ if (!$payment) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Pago | Fábula Dental</title>
+    <title>Edit Payment | Fábula Dental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/forms.css">
     <link rel="stylesheet" href="../css/user-views.css">
@@ -44,7 +44,7 @@ if (!$payment) {
 
     <main class="form-container">
         <div class="form-card">
-            <h2>Modificar Pago</h2>
+            <h2>Edit Payment</h2>
 
             <form id="paymentForm" action="../../controllers/payment-controller.php" method="POST" class="form-grid">
 
@@ -52,43 +52,43 @@ if (!$payment) {
                 <input type="hidden" name="id" value="<?= htmlspecialchars($payment->id) ?>">
 
                 <div class="input-group full-width">
-                    <label for="patientID">Cédula del Paciente</label>
+                    <label for="patientID">Patient ID Number</label>
                     <input type="text" id="patientID" name="patientID" value="<?= htmlspecialchars($payment->patientID) ?>" required pattern="[0-9]{10}">
                 </div>
 
                 <div class="input-group">
-                    <label for="amount">Monto del Pago ($)</label>
+                    <label for="amount">Payment Amount ($)</label>
                     <input type="number" id="amount" name="amount" min="0.01" step="0.01" value="<?= htmlspecialchars($payment->amount) ?>" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="date">Fecha de Pago</label>
+                    <label for="date">Payment Date</label>
                     <input type="date" id="date" name="date" value="<?= htmlspecialchars($payment->date) ?>" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="paymentType">Tipo de Pago</label>
+                    <label for="paymentType">Payment Type</label>
                     <select id="paymentType" name="paymentType" required>
-                        <option value="Deposit" <?= $payment->paymentType === 'Deposit' ? 'selected' : '' ?>>Abono (Deposit)</option>
-                        <option value="Final" <?= $payment->paymentType === 'Final' ? 'selected' : '' ?>>Pago Final (Final)</option>
+                        <option value="Deposit" <?= $payment->paymentType === 'Deposit' ? 'selected' : '' ?>>Deposit</option>
+                        <option value="Final" <?= $payment->paymentType === 'Final' ? 'selected' : '' ?>>Final Payment</option>
                     </select>
                 </div>
 
                 <div class="input-group">
-                    <label for="paymentMethod">Método de Pago</label>
+                    <label for="paymentMethod">Payment Method</label>
                     <select id="paymentMethod" name="paymentMethod" required>
-                        <option value="Cash" <?= $payment->paymentMethod === 'Cash' ? 'selected' : '' ?>>Efectivo</option>
-                        <option value="Transfer" <?= $payment->paymentMethod === 'Transfer' ? 'selected' : '' ?>>Transferencia</option>
-                        <option value="Card" <?= $payment->paymentMethod === 'Card' ? 'selected' : '' ?>>Tarjeta Crédito/Débito</option>
+                        <option value="Cash" <?= $payment->paymentMethod === 'Cash' ? 'selected' : '' ?>>Cash</option>
+                        <option value="Transfer" <?= $payment->paymentMethod === 'Transfer' ? 'selected' : '' ?>>Transfer</option>
+                        <option value="Card" <?= $payment->paymentMethod === 'Card' ? 'selected' : '' ?>>Credit/Debit Card</option>
                     </select>
                 </div>
 
                 <div class="input-group full-width">
-                    <button type="submit" class="btn btn-primary">Actualizar Cambios</button>
+                    <button type="submit" class="btn btn-primary">Update Changes</button>
                 </div>
 
                 <div class="full-width actions-row">
-                    <a href="payment-list.php" class="btn btn-secondary">Cancelar</a>
+                    <a href="payment-list.php" class="btn btn-secondary">Cancel</a>
                 </div>
 
             </form>

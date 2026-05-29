@@ -6,27 +6,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const pass = form["password"].value.trim();
 
         if (user === "" || pass === "") {
-            alert("Todos los campos son obligatorios.");
+            alert("All fields are required.");
             event.preventDefault();
             return;
         }
 
         const userRegex = /^[a-zA-Z0-9]+$/;
         if (!userRegex.test(user)) {
-            alert("El usuario solo puede contener letras y números (sin espacios ni caracteres especiales).");
+            alert("Username can only contain letters and numbers (no spaces or special characters).");
             event.preventDefault();
             return;
         }
 
         if (pass.length > 8) {
-            alert("La contraseña no debe exceder los 8 caracteres.");
+            alert("Password must not exceed 8 characters.");
             event.preventDefault();
             return;
         }
 
         const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
         if (!passRegex.test(pass)) {
-            alert("La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo especial.");
+            alert("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character.");
             event.preventDefault();
             return;
         }

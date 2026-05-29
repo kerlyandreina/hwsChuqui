@@ -1,19 +1,19 @@
 <?php
 session_start();
 
-// Verificar que el usuario esté autenticado y tenga el rol correcto
+// Verify that the user is authenticated and has the correct role
 if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'administrator') {
     header('Location: ../../index.php?error=no_session');
     exit;
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Suministros | Fábula Dental</title>
+    <title>Supply Registration | Fábula Dental</title>
     
     <link rel="stylesheet" href="../css/forms.css">
 </head>
@@ -26,44 +26,44 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] 
 
     <main class="form-container">
         <div class="form-card">
-            <h2>Registrar Nuevo Suministro</h2>
+            <h2>Register New Supply</h2>
 
             <form id="supplyForm" action="../../controllers/supply-controller.php" method="POST" class="form-grid">
 
                 <input type="hidden" name="action" value="create">
 
                 <div class="input-group full-width">
-                    <label for="supplyName">Nombre del Producto / Medicamento</label>
-                    <input type="text" id="supplyName" name="supplyName" placeholder="Ej: Resina Compuesta 3M" required>
+                    <label for="supplyName">Product / Medication Name</label>
+                    <input type="text" id="supplyName" name="supplyName" placeholder="e.g. 3M Composite Resin" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="quantity">Cantidad Inicial</label>
-                    <input type="number" id="quantity" name="quantity" min="1" step="1" placeholder="Ej: 10" required>
+                    <label for="quantity">Initial Quantity</label>
+                    <input type="number" id="quantity" name="quantity" min="1" step="1" placeholder="e.g. 10" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="unitCost">Costo Unitario ($)</label>
-                    <input type="number" id="unitCost" name="unitCost" min="0.01" step="0.01" placeholder="Ej: 5.50" required>
+                    <label for="unitCost">Unit Cost ($)</label>
+                    <input type="number" id="unitCost" name="unitCost" min="0.01" step="0.01" placeholder="e.g. 5.50" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="orderDate">Fecha de Pedido</label>
+                    <label for="orderDate">Order Date</label>
                     <input type="date" id="orderDate" name="orderDate" required>
                 </div>
 
                 <div class="input-group">
-                    <label for="expirationDate">Fecha de Caducidad</label>
+                    <label for="expirationDate">Expiration Date</label>
                     <input type="date" id="expirationDate" name="expirationDate" required>
                 </div>
 
                 <div class="input-group full-width">
-                    <button type="submit" class="btn btn-primary">Guardar en Inventario</button>
+                    <button type="submit" class="btn btn-primary">Save to Inventory</button>
                 </div>
 
                 <div class="full-width actions-row">
-                    <a href="supply-list.php" class="btn btn-secondary">Ver Inventario</a>
-                    <a href="administrator.php" class="btn btn-secondary">Volver al Panel</a>
+                    <a href="supply-list.php" class="btn btn-secondary">View Inventory</a>
+                    <a href="administrator.php" class="btn btn-secondary">Back to Dashboard</a>
                 </div>
 
             </form>
