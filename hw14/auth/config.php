@@ -35,7 +35,7 @@ loadEnv(__DIR__ . '/../.env');
 // -------------------------------------------------------
 define('GOOGLE_CLIENT_ID',     getenv('GOOGLE_CLIENT_ID')     ?: '');
 define('GOOGLE_CLIENT_SECRET', getenv('GOOGLE_CLIENT_SECRET') ?: '');
-define('GOOGLE_REDIRECT_URI',  getenv('GOOGLE_REDIRECT_URI')  ?: '');
+define('GOOGLE_REDIRECT_URI',  rtrim(getenv('GOOGLE_REDIRECT_URI') ?: '', '/'));
 
 // Scopes: solo pedimos nombre, email y foto de perfil
 define('GOOGLE_SCOPES', 'openid email profile');
