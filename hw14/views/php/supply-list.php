@@ -87,8 +87,8 @@ $supplies = Supply::orderBy('created_at', 'desc')->get();
                 </table>
             </div>
             <div class="actions-row mt-4">
-                <a href="../html/supply-form.html" class="btn btn-secondary">Registrar Nuevo</a>
-                <a href="../php/administrator.php" class="btn btn-primary">Volver al Panel</a>
+                <a href="supply-form.php" class="btn btn-secondary">Registrar Nuevo</a>
+                <a href="administrator.php" class="btn btn-primary">Volver al Panel</a>
             </div>
         </div>
     </main>

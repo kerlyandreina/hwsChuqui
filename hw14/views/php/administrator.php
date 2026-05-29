@@ -98,7 +98,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] 
                     </header>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <a href="../html/supply-form.html" class="btn btn-warning rounded-pill px-4 shadow-sm fw-semibold">
+                            <a href="supply-form.php" class="btn btn-warning rounded-pill px-4 shadow-sm fw-semibold">
                                 <i class="bi bi-plus-circle me-2"></i> Añadir Suministro
                             </a>
                         </div>
@@ -121,8 +121,8 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] 
                                 <p class="text-muted small mb-4">Inventario detallado de materiales y alertas de stock.</p>
 
                                 <div class="d-flex gap-2 mt-auto">
-                                    <a href="../html/supply-form.html"
-                                        class="btn btn-warning flex-grow-1 rounded-pill fw-semibold">
+                                    <a href="supply-form.php"
+                                         class="btn btn-warning flex-grow-1 rounded-pill fw-semibold">
                                         <i class="bi bi-plus-lg me-1"></i> Registrar
                                     </a>
                                     <a href="../php/supply-list.php"

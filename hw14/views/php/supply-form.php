@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Verificar que el usuario esté autenticado y tenga el rol correcto
+if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'administrator') {
+    header('Location: ../../index.php?error=no_session');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -53,8 +62,8 @@
                 </div>
 
                 <div class="full-width actions-row">
-                    <a href="../php/supply-list.php" class="btn btn-secondary">Ver Inventario</a>
-                    <a href="administrator.html" class="btn btn-secondary">Volver al Panel</a>
+                    <a href="supply-list.php" class="btn btn-secondary">Ver Inventario</a>
+                    <a href="administrator.php" class="btn btn-secondary">Volver al Panel</a>
                 </div>
 
             </form>

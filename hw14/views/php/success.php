@@ -36,7 +36,7 @@
                     echo '<a href="../html/payment-form.html" class="btn btn-secondary">Registrar otro pago</a>';
                     echo '<a href="./payment-list.php" class="btn btn-primary">Ver historial de pagos</a>';
                 } elseif ($type === 'supply') {
-                    echo '<a href="../html/supply-form.html" class="btn btn-secondary">Añadir otro suministro</a>';
+                    echo '<a href="supply-form.php" class="btn btn-secondary">Añadir otro suministro</a>';
                     echo '<a href="./supply-list.php" class="btn btn-primary">Ver inventario</a>';
                 }
                 ?>
@@ -45,7 +45,7 @@
             <hr class="my-4 opacity-25">
 
             <div class="d-grid gap-2 col-md-6 mx-auto">
-                <a href="../html/administrator.html" class="btn btn-outline-secondary">Volver al Panel Principal</a>
+                <a href="../../index.php" class="btn btn-outline-secondary">Volver al Panel Principal</a>
             </div>
         </div>
     </main>
