@@ -1,0 +1,10 @@
+node_modules/
+# Bloquear .env con credenciales reales
+.env
+.env.local
+.env.production
+# Permitir .env.example (plantilla sin credenciales)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+vendor/
