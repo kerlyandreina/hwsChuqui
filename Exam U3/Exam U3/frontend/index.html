@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Days Until Expiration</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Minimarket</h1>
+            <p class="subtitle">Calculate Days Until Expiration</p>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <h2>Search Product</h2>
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Enter product name (e.g.: Coca-Cola)"
+                        class="search-input"
+                    >
+                    <div class="button-group">
+                        <button id="findBtn" class="btn btn-primary">
+                            Find Product
+                        </button>
+                        <button id="cancelBtn" class="btn btn-secondary">
+                            Cancel Find
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="resultSection" class="result-section hidden">
+                <h2>Search Result</h2>
+                <div id="productResult" class="product-card">
+                    <!-- Result will be displayed here dynamically -->
+                </div>
+            </section>
+
+            <!-- List of all products -->
+            <section class="products-section">
+                <h2>Available Products List</h2>
+                <button id="loadProductsBtn" class="btn btn-info">
+                    Load All Products
+                </button>
+                <div id="productsList" class="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Minimarket - Exam U3 Chuqui Kerly</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
