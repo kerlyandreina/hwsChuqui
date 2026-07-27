@@ -1,127 +1,86 @@
 const Product = require('../models/Product');
 
-// Get all products
-const getAllProducts = async (req, res) => {
+const normalize = value => String(value ?? '').trim().toLowerCase();
+
+const roundToTwo = value => Math.round(value * 100) / 100;
+
+const escapeRegExp = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const formatProduct = product => ({
+    _id: product._id,
+    name: product.name,
+    price: product.price,
+    dateExpiration: product.dateExpiration.toISOString().slice(0, 10),
+    daysExpiration: product.daysExpiration ?? null
+});
+
+const findCatalogProduct = async name => {
+    const term = normalize(name);
+
+    if (!term) {
+        return null;
+    }
+
+    return Product.findOne({
+        $or: [
+            { name: new RegExp(`^${escapeRegExp(term)}$`, 'i') },
+            { name: new RegExp(escapeRegExp(term), 'i') }
+        ]
+    });
+};
+
+const getCatalog = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().sort({ createdAt: 1 });
+
         res.status(200).json({
             success: true,
             count: products.length,
-            data: products
+            data: products.map(formatProduct)
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error getting products',
+            message: 'Error loading catalog',
             error: error.message
         });
     }
 };
 
-// Find product by name and calculate days until expiration
-const findProduct = async (req, res) => {
-    try {
-        const { name } = req.params;
-        
-        const product = await Product.findOne({ 
-            name: { $regex: name, $options: 'i' } 
-        });
-
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: 'Product not found'
-            });
-        }
-
-        // Calculate days until expiration
-        const today = new Date();
-        const expirationDate = new Date(product.dateExpiration);
-        const timeDiff = expirationDate.getTime() - today.getTime();
-        const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-        // Update product with days until expiration
-        product.daysExpiration = daysRemaining;
-        await product.save();
-
-        res.status(200).json({
-            success: true,
-            data: {
-                _id: product._id,
-                name: product.name,
-                price: product.price,
-                dateExpiration: product.dateExpiration,
-                daysExpiration: daysRemaining
-            }
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error finding product',
-            error: error.message
-        });
-    }
-};
-
-// Find product by ID and calculate days until expiration
-const findProductById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        
-        const product = await Product.findById(id);
-
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: 'Product not found'
-            });
-        }
-
-        // Calculate days until expiration
-        const today = new Date();
-        const expirationDate = new Date(product.dateExpiration);
-        const timeDiff = expirationDate.getTime() - today.getTime();
-        const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-        // Update product with days until expiration
-        product.daysExpiration = daysRemaining;
-        await product.save();
-
-        res.status(200).json({
-            success: true,
-            data: {
-                _id: product._id,
-                name: product.name,
-                price: product.price,
-                dateExpiration: product.dateExpiration,
-                daysExpiration: daysRemaining
-            }
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error finding product',
-            error: error.message
-        });
-    }
-};
-
-// Create a new product
 const createProduct = async (req, res) => {
     try {
         const { name, price, dateExpiration } = req.body;
+        const productName = String(name ?? '').trim();
+        const productPrice = Number(price);
+        const expirationDate = new Date(dateExpiration);
+
+        if (!productName || !Number.isFinite(productPrice) || Number.isNaN(expirationDate.getTime())) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name, price, and expiration date are required.'
+            });
+        }
+
+        const existingProduct = await Product.findOne({ name: new RegExp(`^${productName}$`, 'i') });
+
+        if (existingProduct) {
+            return res.status(409).json({
+                success: false,
+                message: 'A product with that name already exists.'
+            });
+        }
 
         const product = await Product.create({
-            name,
-            price,
-            dateExpiration,
+            name: productName,
+            price: roundToTwo(productPrice),
+            dateExpiration: expirationDate,
             daysExpiration: null
         });
 
         res.status(201).json({
             success: true,
             message: 'Product created successfully',
-            data: product
+            data: formatProduct(product)
         });
     } catch (error) {
         res.status(500).json({
@@ -132,9 +91,140 @@ const createProduct = async (req, res) => {
     }
 };
 
+const calculateCartTotal = (req, res) => {
+    try {
+        const { items } = req.body;
+
+        if (!Array.isArray(items) || items.length !== 5) {
+            return res.status(400).json({
+                success: false,
+                message: 'You must enter five products.'
+            });
+        }
+
+        const normalizedItems = items.map((item, index) => {
+            const name = String(item?.name ?? '').trim();
+            const price = Number(item?.price);
+
+            if (!name || !Number.isFinite(price)) {
+                throw new Error(`Invalid product at position ${index + 1}.`);
+            }
+
+            return {
+                name,
+                price: roundToTwo(price)
+            };
+        });
+
+        const total = roundToTwo(
+            normalizedItems.reduce((sum, item) => sum + item.price, 0)
+        );
+
+        res.status(200).json({
+            success: true,
+            data: {
+                items: normalizedItems,
+                total
+            }
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+const calculateIva = async (req, res) => {
+    try {
+        const { name, price, ivaRate } = req.body;
+        const product = await findCatalogProduct(name);
+        const basePrice = Number.isFinite(Number(price)) ? Number(price) : product?.price;
+
+        if (!Number.isFinite(basePrice)) {
+            return res.status(400).json({
+                success: false,
+                message: 'You must enter a valid product.'
+            });
+        }
+
+        const rate = Number.isFinite(Number(ivaRate)) ? Number(ivaRate) : 0.12;
+        const ivaAmount = roundToTwo(basePrice * rate);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                productName: product?.name ?? String(name ?? '').trim(),
+                basePrice: roundToTwo(basePrice),
+                ivaRate: rate,
+                ivaAmount
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error calculating VAT',
+            error: error.message
+        });
+    }
+};
+
+const calculateExpiration = async (req, res) => {
+    try {
+        const { name, day, month, year } = req.body;
+        const product = await findCatalogProduct(name);
+        const dayNumber = Number(day);
+        const monthNumber = Number(month);
+        const yearNumber = Number(year);
+
+        if (!Number.isInteger(dayNumber) || !Number.isInteger(monthNumber) || !Number.isInteger(yearNumber)) {
+            return res.status(400).json({
+                success: false,
+                message: 'You must enter a valid date.'
+            });
+        }
+
+        const expirationDate = new Date(yearNumber, monthNumber - 1, dayNumber);
+
+        if (
+            Number.isNaN(expirationDate.getTime()) ||
+            expirationDate.getDate() !== dayNumber ||
+            expirationDate.getMonth() !== monthNumber - 1 ||
+            expirationDate.getFullYear() !== yearNumber
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: 'The entered date is not valid.'
+            });
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        expirationDate.setHours(0, 0, 0, 0);
+
+        const daysRemaining = Math.ceil((expirationDate.getTime() - today.getTime()) / 86400000);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                productName: product?.name ?? String(name ?? '').trim(),
+                expirationDate: expirationDate.toISOString().slice(0, 10),
+                daysRemaining
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error calculating expiration time',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
-    getAllProducts,
-    findProduct,
-    findProductById,
-    createProduct
+    getCatalog,
+    createProduct,
+    calculateCartTotal,
+    calculateIva,
+    calculateExpiration
 };
