@@ -1,6 +1,4 @@
-const API_URL = window.location.protocol === 'file:'
-    ? 'http://localhost:4005/api/products'
-    : `${window.location.origin}/api/products`;
+const API_URL = '/api/products';
 
 const money = new Intl.NumberFormat('en-US', {
     style: 'currency',
